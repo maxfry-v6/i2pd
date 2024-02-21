@@ -2,6 +2,8 @@ name: Build on Ubuntu
 
 on:
   push:
+    branches:
+    - '*'
     paths:
     - .github/workflows/build.yml
     - build/CMakeLists.txt
@@ -13,6 +15,9 @@ on:
     - Makefile
     - Makefile.linux
     tags:
+    - '*'
+  pull_request:
+    branches:
     - '*'
 
 jobs:

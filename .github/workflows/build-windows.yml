@@ -2,6 +2,8 @@ name: Build on Windows
 
 on:
   push:
+    branches:
+    - '*'
     paths:
     - .github/workflows/build-windows.yml
     - build/CMakeLists.txt
@@ -15,7 +17,9 @@ on:
     - Makefile.mingw
     tags:
     - '*'
-  pull_request
+  pull_request:
+    branches:
+    - '*'
 
 defaults:
   run:

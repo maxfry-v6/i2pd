@@ -2,6 +2,8 @@ name: Build on Windows with MSVC
 
 on:
   push:
+    branches:
+    - '*'
     paths:
     - .github/workflows/build-windows-msvc.yml
     - build/CMakeLists.txt
@@ -13,7 +15,9 @@ on:
     - Win32/**
     tags:
     - '*'
-  pull_request
+  pull_request:
+    branches:
+    - '*'
 
 jobs:
   build:
