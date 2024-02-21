@@ -48,14 +48,14 @@ jobs:
         powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://sourceforge.net/projects/boost/files/boost-binaries/1.81.0/boost_1_81_0-msvc-14.3-64.exe/download -OutFile boost_1_81_0-msvc-14.3-64.exe)"
         ./boost_1_81_0-msvc-14.3-64.exe /VERYSILENT
 
-    - name: Install OpenSSL
-      run: |
-        powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://slproweb.com/download/Win64OpenSSL-3_2_1.exe -OutFile Win64OpenSSL-3_2_1.exe)"
-        ./Win64OpenSSL-3_2_1.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-
+    #- name: Install OpenSSL
+    #  run: |
+    #    powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://slproweb.com/download/Win64OpenSSL-3_2_1.exe -OutFile Win64OpenSSL-3_2_1.exe)"
+    #    ./Win64OpenSSL-3_2_1.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-
 
     # Windows image already has OpenSSL installed to %programfiles%\OpenSSL, so we using that path, not OpenSSL-Win64
-    - name: Make copy of the OpenSSL libraries for CMake
-      run: xcopy /y "c:\Program Files\OpenSSL\lib\VC\x64\MTd\*" "c:\Program Files\OpenSSL\lib\"
+    #- name: Make copy of the OpenSSL libraries for CMake
+    #  run: xcopy /y "c:\Program Files\OpenSSL\lib\VC\x64\MTd\*" "c:\Program Files\OpenSSL\lib\"
 
     - name: Configure
       working-directory: build
