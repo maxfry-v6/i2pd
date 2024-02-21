@@ -1,6 +1,19 @@
 name: Build on Windows with MSVC
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+    - .github/workflows/build-windows-msvc.yml
+    - build/CMakeLists.txt
+    - build/cmake_modules/**
+    - daemon/**
+    - i18n/**
+    - libi2pd/**
+    - libi2pd_client/**
+    - Win32/**
+    tags:
+    - '*'
+  pull_request
 
 jobs:
   build:
@@ -26,16 +39,6 @@ jobs:
         ./install_zlib.bat
         del install_zlib.bat
 
-    #- name: Install Boost
-    #  uses: crazy-max/ghaction-chocolatey@v2
-    #  with:
-    #    args: install boost-msvc-14.3 --version=1.81.0
-
-    #- name: Install OpenSSL
-    #  uses: crazy-max/ghaction-chocolatey@v2
-    #  with:
-    #    args: install openssl
-
     - name: Install Boost
       run: |
         powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://sourceforge.net/projects/boost/files/boost-binaries/1.81.0/boost_1_81_0-msvc-14.3-64.exe/download -OutFile boost_1_81_0-msvc-14.3-64.exe)"
@@ -45,7 +48,9 @@ jobs:
       run: |
         powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://slproweb.com/download/Win64OpenSSL-3_2_1.exe -OutFile Win64OpenSSL-3_2_1.exe)"
         ./Win64OpenSSL-3_2_1.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-
-        xcopy "c:\Program Files\OpenSSL-Win64\lib\VC\x64\MTd\*" "c:\Program Files\OpenSSL-Win64\lib\"
+
+    - name: Make copy of the OpenSSL libraries for CMake
+      run: xcopy /y "c:\Program Files\OpenSSL-Win64\lib\VC\x64\MTd\*" "c:\Program Files\OpenSSL-Win64\lib\"
 
     - name: Configure
       working-directory: build
