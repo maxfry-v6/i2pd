@@ -60,10 +60,10 @@ jobs:
     - name: Make copy of the OpenSSL libraries for CMake
       run: |
         dir ${{ github.workspace }}
-        dir ${{env.openssl_path}}
-        dir ${{env.openssl_path}}\lib
         dir ${{env.openssl_path}}\lib\VC
-      #  xcopy /y "${{env.openssl_path}}\lib\VC\x64\MTd\*" "${{env.openssl_path}}\lib\"
+        dir ${{env.openssl_path}}\lib\VC\x64\
+        dir ${{env.openssl_path}}\lib\VC\x64\MTd\
+        xcopy /s /y "${{env.openssl_path}}\lib\VC\x64\MTd" "${{env.openssl_path}}\lib"
 
     - name: Configure
       working-directory: build
