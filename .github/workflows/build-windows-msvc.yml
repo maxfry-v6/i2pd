@@ -58,7 +58,12 @@ jobs:
 
     # Windows image already has OpenSSL installed to %programfiles%\OpenSSL, so we using that path, not OpenSSL-Win64
     - name: Make copy of the OpenSSL libraries for CMake
-      run: xcopy /y "${{env.openssl_path}}\lib\VC\x64\MTd\*" "${{env.openssl_path}}\lib\"
+      run: |
+        dir ${{ github.workspace }}
+        dir ${{env.openssl_path}}
+        dir ${{env.openssl_path}}\lib
+        dir ${{env.openssl_path}}\lib\VC
+      #  xcopy /y "${{env.openssl_path}}\lib\VC\x64\MTd\*" "${{env.openssl_path}}\lib\"
 
     - name: Configure
       working-directory: build
