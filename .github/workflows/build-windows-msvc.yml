@@ -23,6 +23,9 @@ jobs:
   build:
     name: Build
     runs-on: windows-latest
+    env:
+      boost_path: "${{github.workspace}}\boost_1_83_0"
+      openssl_path: "${{github.workspace}}\openssl_3_2_1"
 
     strategy:
       fail-fast: false
@@ -45,21 +48,21 @@ jobs:
 
     - name: Install Boost
       run: |
-        powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://sourceforge.net/projects/boost/files/boost-binaries/1.81.0/boost_1_81_0-msvc-14.3-64.exe/download -OutFile boost_1_81_0-msvc-14.3-64.exe)"
-        ./boost_1_81_0-msvc-14.3-64.exe /VERYSILENT
+        powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://sourceforge.net/projects/boost/files/boost-binaries/1.83.0/boost_1_83_0-msvc-14.3-64.exe/download -OutFile boost_1_83_0-msvc-14.3-64.exe)"
+        ./boost_1_83_0-msvc-14.3-64.exe /DIR="${{env.boost_path}}" /VERYSILENT /SUPPRESSMSGBOXES /SP-
 
-    #- name: Install OpenSSL
-    #  run: |
-    #    powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://slproweb.com/download/Win64OpenSSL-3_2_1.exe -OutFile Win64OpenSSL-3_2_1.exe)"
-    #    ./Win64OpenSSL-3_2_1.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-
+    - name: Install OpenSSL
+      run: |
+        powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://slproweb.com/download/Win64OpenSSL-3_2_1.exe -OutFile Win64OpenSSL-3_2_1.exe)"
+        ./Win64OpenSSL-3_2_1.exe /DIR="${{env.openssl_path}}" /TASKS="copytobin" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-
 
     # Windows image already has OpenSSL installed to %programfiles%\OpenSSL, so we using that path, not OpenSSL-Win64
-    #- name: Make copy of the OpenSSL libraries for CMake
-    #  run: xcopy /y "c:\Program Files\OpenSSL\lib\VC\x64\MTd\*" "c:\Program Files\OpenSSL\lib\"
+    - name: Make copy of the OpenSSL libraries for CMake
+      run: xcopy /y "${{env.openssl_path}}\lib\VC\x64\MTd\*" "${{env.openssl_path}}\lib\"
 
     - name: Configure
       working-directory: build
-      run: cmake -DBoost_ROOT="C:\local\boost_1_81_0" -DWITH_STATIC=ON .
+      run: cmake -DBoost_ROOT="${{env.boost_path}}" -DOPENSSL_ROOT_DIR="${{env.openssl_path}}" -DWITH_STATIC=ON .
 
     - name: Build
       working-directory: build
