@@ -48,12 +48,12 @@ jobs:
 
     - name: Install Boost
       run: |
-        powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://sourceforge.net/projects/boost/files/boost-binaries/1.83.0/boost_1_83_0-msvc-14.3-64.exe/download -OutFile boost_1_83_0-msvc-14.3-64.exe)"
+        powershell -Command "(Start-BitsTransfer -Source https://sourceforge.net/projects/boost/files/boost-binaries/1.83.0/boost_1_83_0-msvc-14.3-64.exe/download -Destination boost_1_83_0-msvc-14.3-64.exe)"
         ./boost_1_83_0-msvc-14.3-64.exe /DIR="${{env.boost_path}}" /VERYSILENT /SUPPRESSMSGBOXES /SP-
 
     - name: Install OpenSSL
       run: |
-        powershell -Command "(Invoke-WebRequest -UserAgent "Wget" -Uri https://slproweb.com/download/Win64OpenSSL-3_2_1.exe -OutFile Win64OpenSSL-3_2_1.exe)"
+        powershell -Command "(Start-BitsTransfer -Source https://slproweb.com/download/Win64OpenSSL-3_2_1.exe -Destination Win64OpenSSL-3_2_1.exe)"
         ./Win64OpenSSL-3_2_1.exe /DIR="${{env.openssl_path}}" /TASKS="copytobin" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-
 
     # Windows image already has OpenSSL installed to %programfiles%\OpenSSL, so we using that path, not OpenSSL-Win64
